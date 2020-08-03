@@ -17,9 +17,15 @@ function start() {
   <div id="menu">
     <?php
     if (isset($_SESSION['logged'])) {
+      if ($_SESSION['logged'] != false) {
+    ?>
+    <a href="news.php">Новости</a>
+    <?php
+      }
+    }
+    if (isset($_SESSION['logged'])) {
       if ($_SESSION['logged'] != false && $_SESSION['admin'] != true) {
     ?>
-    <a href="news.php" style="padding-left: 0;border-left: 0;">Новости</a>
     <a href="profile.php">Личный кабинет</a>
     <?php
       }
@@ -27,6 +33,7 @@ function start() {
     if (isset($_SESSION['logged'])) {
       if ($_SESSION['logged'] != false && $_SESSION['admin'] != false) {
     ?>
+    <a href="add_news.php">Добавить новости</a>
     <a href="list_students.php">Список учеников</a>
     <a href="add_student.php">Добавить учени-ка(цу)</a>
     <?php
@@ -132,6 +139,34 @@ else {
 <input type="submit">
 <?php
   }
+  else if ($num_err == 5) {
+?>
+<form action="add_news.php" method="post">
+<input type="text" placeholder="title" name="ntitle" minlength="5" maxlength="100" value=""><br><br>
+<input type="text" placeholder="description" name="ndescription" minlength="1" value=""><br><br>
+<input type="text" placeholder="photo-link" name="nphoto" minlength="1" value=""><br><br>
+<input type="submit">
+<?php
+  }
+  else if ($num_err == 6) {
+?>
+<div style="background: gray; color: red; padding-bottom: 5px; padding-left: 15px;">
+<?php
+if ($prmt[1]) {
+?><p>Заголовка должен быть больше 5 и меньше 100 символов</p><?php
+}
+if ($prmt[2]) {
+?><p style="color: green;">Успешно добавлено новости</p><?php
+}
+?>
+</div><br>
+<form action="add_news.php" method="post">
+<input type="text" placeholder="title" name="ntitle" minlength="5" maxlength="100" value=""><br><br>
+<input type="text" placeholder="description" name="ndescription" minlength="1" value=""><br><br>
+<input type="text" placeholder="photo-link" name="nphoto" minlength="1" value=""><br><br>
+<input type="submit">
+<?php
+  }
   the_end();
 }
 
@@ -172,7 +207,7 @@ function list_db($db, $table) {
     }
     else if ($table == 'news') {
       for ($i = 0; $i < $rows; $i++) {
-        if ($row = mysqli_fetch_all($result)) {
+        if ($row[$i]) {
           $arg[$i]['id'] = $row[$i][0];
           $arg[$i]['title'] = $row[$i][1];
           $arg[$i]['description'] = $row[$i][2];
@@ -190,51 +225,5 @@ function list_db($db, $table) {
 function close_db($db) {
   mysqli_close($db);
 }
-
-/*
-
-$password = md5('123456789');
-
-$query = "INSERT INTO accounts VALUES (NULL, 'Бобылёв', 'Борис', 'Boris.Bobilev', '".$password."', '1')";
-
-$result = mysqli_query($con, $query);
-
-if ($result) echo "yes<br>";
-else echo "no<br>";
-
-*/
-
-//
-/*
-$account = [[]];
-
-// Perform query
-if ($result = mysqli_query($con, "SELECT * FROM accounts")) {
-  $rows = mysqli_num_rows($result);
-  for ($i = 0; $i < $rows; $i++) {
-    $row = mysqli_fetch_all($result);
-    $account[$i]['id'] = $row[$i][0];
-    $account[$i]['name'] = $row[$i][1];
-    $account[$i]['surname'] = $row[$i][2];
-    $account[$i]['login'] = $row[$i][3];
-    $account[$i]['pass'] = $row[$i][4];
-    $account[$i]['admin'] = $row[$i][5];
-  }
-  mysqli_free_result($result);
-}
-
-/*
-echo "<br>";
-for ($i = 0; $i < count($accounts); $i++) {
-  echo "id: ".$accounts[$i]['id']."<br>";
-  echo "name: ".$accounts[$i]['name']."<br>";
-  echo "surname: ".$accounts[$i]['surname']."<br>";
-  echo "login: ".$accounts[$i]['login']."<br>";
-  echo "pass: ".$accounts[$i]['pass']."<br>";
-  echo "admin: ".$accounts[$i]['admin']."<br><br>";
-}
-*/
-
-//
 
 ?>
