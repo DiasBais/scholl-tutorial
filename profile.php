@@ -4,9 +4,11 @@ require "functions.php";
 
 start();
 
-// if (isset($_SESSION['logged'])) {
-  // if ($_SESSION['logged'] != true) header('Location: auth.php');
-// }
+if (isset($_SESSION['logged'])) {
+  if ($_SESSION['logged'] != true) header('Location: auth.php');
+  if ($_SESSION['logged'] != false && $_SESSION['admin'] != 0) header('Location: list_students.php');
+}
+else header('Location: auth.php');
 
 $db = connect_db();
 
@@ -25,21 +27,6 @@ for ($i = 0; $i < count($accounts); $i++) {
     echo "<td>".$accounts[$i]['login']."</td>";
     echo "</tr>";
     break;
-  }
-}
-echo "</tbody></table><br>";
-echo "<table border='1'><tbody>";
-echo "<tr><td>id</td><td>author</td><td>title</td><td>description</td><td>views</td><td>photo</td></tr>";
-for ($i = 0; $i < count($news); $i++) {
-  if ($news[$i]) {
-    if ($news[$i]['author'] != $_SESSION['alogin']) continue;
-    echo "<tr>";
-    echo "<td>".$news[$i]['id']."</td>";
-    echo "<td>".$news[$i]['title']."</td>";
-    echo "<td>".$news[$i]['description']."</td>";
-    echo "<td>".$news[$i]['views']."</td>";
-    echo "<td>".$news[$i]['photo']."</td>";
-    echo "</tr>";
   }
 }
 echo "</tbody></table>";

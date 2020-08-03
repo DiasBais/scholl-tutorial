@@ -6,6 +6,7 @@ if (isset($_SESSION['logged'])) {
   if ($_SESSION['logged'] != false && $_SESSION['admin'] == true) header('Location: list_students.php');
   if ($_SESSION['logged'] != false && $_SESSION['admin'] == false) header('Location: profile.php');
 }
+else header('Location: auth.php');
 
 if (isset($_POST['alogin']) && isset($_POST['apass'])) {
 
@@ -21,7 +22,7 @@ if (strlen($alogin) != 0 && strlen($apass) != 0) {
   for ($i = 0; $i < count($accounts); $i++) {
     if ($alogin == $accounts[$i]['login']) {
       $logged = true;
-      if ($apass == $accounts[$i]['password']) {
+      if (md5($apass) == $accounts[$i]['password']) {
         $_SESSION['logged'] = true;
         $_SESSION['alogin'] = $alogin;
         $_SESSION['apass'] = $apass;

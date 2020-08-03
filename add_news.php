@@ -6,6 +6,7 @@ if (isset($_SESSION['logged'])) {
   if ($_SESSION['logged'] != true) header('Location: auth.php');
   if ($_SESSION['admin'] != true) header('Location: profile.php');
 }
+else header('Location: auth.php');
 
 $db = connect_db();
 
